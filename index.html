@@ -263,13 +263,13 @@
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
 
-    // ---------------------------------------------------------------
-    // CONNECT YOUR EMAIL LIST HERE LATER.
-    // Right now this just logs the lead and unlocks the download.
-    // When you pick Mailchimp / Kit / etc., paste their form action or
-    // fetch() call here. name + email are already captured.
-    console.log('New lead:', { name, email });
-    // ---------------------------------------------------------------
+    // Send the lead to Kit (ConvertKit). We don't block the download on the
+    // response; the subscription is created server-side regardless.
+    const ckData = new FormData();
+    ckData.append('email_address', email);
+    if (name) ckData.append('fields[first_name]', name);
+    fetch('https://app.kit.com/forms/9568544/subscriptions', { method: 'POST', body: ckData })
+      .catch(function () {});
 
     form.style.display = 'none';
     formTitle.style.display = 'none';
